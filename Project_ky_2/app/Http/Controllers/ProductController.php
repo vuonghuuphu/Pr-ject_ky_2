@@ -10,7 +10,7 @@ class ProductController extends Controller
     public function index(){
         $list = DB::table('product')
         ->where('deleted', 0)
-        ->get();
+        ->paginate(8);
 
         $list_delete = DB::table('product')
         ->where('deleted', 1)

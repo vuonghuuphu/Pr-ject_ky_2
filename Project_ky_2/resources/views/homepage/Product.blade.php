@@ -20,6 +20,9 @@
     <link rel="stylesheet" href="{{asset('css/owl.carousel.min.css')}}" type="text/css">
     <link rel="stylesheet" href="{{asset('css/slicknav.min.css')}}" type="text/css">
     <link rel="stylesheet" href="{{asset('css/style.css')}}">
+    <style type="text/css">
+
+    </style>
 </head>
 <body>
     <!-- Page Preloder -->
@@ -79,11 +82,11 @@
     <!-- Humberger End -->
 
     <!-- Header Section Begin -->
-    <header class="header">
+     <header class="header">
         <div class="header__top">
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-6">
+                    <div class="col-lg-6 col-md-6">
                         <div class="header__top__left">
                             <ul>
                                 <li><i class="fa fa-envelope"></i> hello@colorlib.com</li>
@@ -91,7 +94,7 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="col-lg-6">
+                    <div class="col-lg-6 col-md-6">
                         <div class="header__top__right">
                             <div class="header__top__right__social">
                                 <a href="#"><i class="fa fa-facebook"></i></a>
@@ -101,43 +104,55 @@
                             </div>
 
                             <div class="header__top__right__auth">
-                                <a href="#"><i class="fa fa-user"></i> Login</a>
+                                @if($user != "")
+                                <a href="#"><i class="fa fa-user"></i>{{$user -> name}}</a>
+                                @else
+                                <a href="#"><i class="fa fa-user"></i>login</a>
+                                @endif
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+
+
         <div class="container">
             <div class="row">
-                <div class="col-lg-3" >
+                <div class="col-lg-3">
                     <div class="header__logo">
                         <a href="{{ route('home') }}"><img src="https://i.ytimg.com/vi/zy9neIJzttY/maxresdefault.jpg" height="100px"></a>
                     </div>
                 </div>
                 <div class="col-lg-6" style="padding-top: 30px;">
                     <nav class="header__menu">
-                       <ul>
-                            <li><a href="{{ route('home') }}">Trang chủ</a></li>
+                        <ul>
+                            <li ><a href="{{ route('home') }}">Trang chủ</a></li>
                             <li class="active"><a href="#">Sản phẩm</a>
-                                <ul class="header__menu__dropdown">
-                            @foreach ($list_danhmuc as $item)
+                            <ul class="header__menu__dropdown">
+                             @foreach ($list_danhmuc as $item)
                             <li><a href="{{ route('product') }}?id={{$item -> id}}">{{$item -> name}}</a></li>
                             @endforeach
                                 </ul>
                             </li>
-                            <li><a href="./shop-grid.html">Tin tức</a></li>
-                            <li><a href="./blog.html">about us</a></li>
+                            <li><a href="{{ route('news') }}">Tin tức</a></li>
+                            <li><a href="{{ route('abus') }}">about us</a></li>
                         </ul>
                     </nav>
                 </div>
-                <div class="col-lg-3" style="padding-top: 30px;">
+                <div class="col-lg-3"style="padding-top: 40px;">
                     <div class="header__cart">
                         <ul>
-                            <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>
-                            <li><a href="#"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li>
+                            @if($user == "")
+                            <li><a href=""><i class="fa fa-heart"></i> <span>{{ $l }}</span></a></li>
+                            <li><a href=""><i class="fa fa-shopping-bag"></i> <span>{{ $t }}</span></a></li>
+                            @else
+                            <li><a href="{{ route('plike') }}"><i class="fa fa-heart"></i> <span>{{ $l }}</span></a></li>
+                            <li><a href="{{ route('cart') }}"><i class="fa fa-shopping-bag"></i> <span>{{ $t }}</span></a></li>
+                            @endif
                         </ul>
-                        <div class="header__cart__price">item: <span>$150.00</span></div>
+                        
                     </div>
                 </div>
             </div>
@@ -222,90 +237,11 @@
                             @endforeach
                         </ul>
                         </div>
-                        <!-- <div class="sidebar__item">
-                            <h4>Price</h4>
-                            <div class="price-range-wrap">
-                                <div class="price-range ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content"
-                                    data-min="10" data-max="540">
-                                    <div class="ui-slider-range ui-corner-all ui-widget-header"></div>
-                                    <span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default"></span>
-                                    <span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default"></span>
-                                </div>
-                                <div class="range-slider">
-                                    <div class="price-input">
-                                        <input type="text" id="minamount">
-                                        <input type="text" id="maxamount">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="sidebar__item sidebar__item__color--option">
-                            <h4>Colors</h4>
-                            <div class="sidebar__item__color sidebar__item__color--white">
-                                <label for="white">
-                                    White
-                                    <input type="radio" id="white">
-                                </label>
-                            </div>
-                            <div class="sidebar__item__color sidebar__item__color--gray">
-                                <label for="gray">
-                                    Gray
-                                    <input type="radio" id="gray">
-                                </label>
-                            </div>
-                            <div class="sidebar__item__color sidebar__item__color--red">
-                                <label for="red">
-                                    Red
-                                    <input type="radio" id="red">
-                                </label>
-                            </div>
-                            <div class="sidebar__item__color sidebar__item__color--black">
-                                <label for="black">
-                                    Black
-                                    <input type="radio" id="black">
-                                </label>
-                            </div>
-                            <div class="sidebar__item__color sidebar__item__color--blue">
-                                <label for="blue">
-                                    Blue
-                                    <input type="radio" id="blue">
-                                </label>
-                            </div>
-                            <div class="sidebar__item__color sidebar__item__color--green">
-                                <label for="green">
-                                    Green
-                                    <input type="radio" id="green">
-                                </label>
-                            </div>
-                        </div>
+
+
+
+
                         <div class="sidebar__item">
-                            <h4>Popular Size</h4>
-                            <div class="sidebar__item__size">
-                                <label for="large">
-                                    Large
-                                    <input type="radio" id="large">
-                                </label>
-                            </div>
-                            <div class="sidebar__item__size">
-                                <label for="medium">
-                                    Medium
-                                    <input type="radio" id="medium">
-                                </label>
-                            </div>
-                            <div class="sidebar__item__size">
-                                <label for="small">
-                                    Small
-                                    <input type="radio" id="small">
-                                </label>
-                            </div>
-                            <div class="sidebar__item__size">
-                                <label for="tiny">
-                                    Tiny
-                                    <input type="radio" id="tiny">
-                                </label>
-                            </div>
-                        </div> -->
-                        <div class="sidebar__item" style="padding-top: 40%;">
                             <div class="latest-product__text">
                                 <h4>Sản phẩm mới</h4>
                                 <div class="latest-product__slider owl-carousel">
@@ -315,7 +251,7 @@
                                      @if ($count++ < 5)
                                 <a href="{{ route('det') }}?id={{$item -> id}}" class="latest-product__item">
                                     <div class="latest-product__item__pic" style="width: 100px; height: 100px;">
-                                        <img src="{{$item -> thumbnail}}">
+                                        <img src="../../public/sanpham/products/{{ $item -> thumbnail}}.jpg">
                                     </div>
                                     <div class="latest-product__item__text">
                                         <h6>{{$item -> name}}</h6>
@@ -337,7 +273,7 @@
                             @if ($count1++ >=5)
                                     <a href="{{ route('det') }}?id={{$item -> id}}" class="latest-product__item">
                                     <div class="latest-product__item__pic"style="width: 100px; height: 100px;">
-                                        <img src="{{$item -> thumbnail}}">
+                                        <img src="../../public/sanpham/products/{{ $item -> thumbnail}}.jpg">
                                     </div>
                                     <div class="latest-product__item__text">
                                         <h6>{{$item -> name}}</h6>
@@ -365,12 +301,38 @@
                         </div>
                         <div class="row">
                             <div class="product__discount__slider owl-carousel">
+                                @if($user != "")
                                 @foreach ($list_spnb as $item) 
                                 @if ($item -> sale > 1 && $item -> deleted == 0 )
                                 <div class="col-lg-4">
                                     <div class="product__discount__item">
                                         <div class="product__discount__item__pic set-bg"
-                                            data-setbg="{{$item -> thumbnail}}">
+                                            data-setbg="../../public/sanpham/products/{{ $item -> thumbnail}}.jpg">
+                                            <div class="product__discount__percent">{{$item -> sale}}%</div>
+                                            <ul class="product__item__pic__hover">
+                                @if($item -> like_user != "" && $item -> like_user == $user -> id)
+                                            <li><a href="{{ route('plike') }}"><i style="color:red;" class="fa fa-heart"></i></a></li>
+                                @else
+                                            <li><a href="{{ route('likeproduct1') }}?id={{$item -> id}}"><i class="fa fa-heart"></i></a></li>   
+                                @endif
+                                            <li><a href="{{ route('det') }}?id={{$item -> id}}"><i class="fa fa-shopping-cart"></i></a></li>
+                                             
+                                            </ul>
+                                        </div>
+                                        <div class="product__discount__item__text">
+                                            <h5>{{$item -> name}}</h5>
+                                            <div class="product__item__price"style="color:#b3822e;">{{ number_format($item -> giasale) }} đ<br> <span>{{ number_format($item -> price) }} đ</span></div>
+                                        </div>
+                                    </div></div>
+                                    @endif
+                                    @endforeach 
+                                    @else
+                                @foreach ($list_spnb as $item) 
+                                @if ($item -> sale > 1 && $item -> deleted == 0 )
+                                <div class="col-lg-4">
+                                    <div class="product__discount__item">
+                                        <div class="product__discount__item__pic set-bg"
+                                            data-setbg="../../public/sanpham/products/{{ $item -> thumbnail}}.jpg">
                                             <div class="product__discount__percent">{{$item -> sale}}%</div>
                                             <ul class="product__item__pic__hover">
                                                 <li><a href="#"><i class="fa fa-heart"></i></a></li>
@@ -384,6 +346,7 @@
                                     </div></div>
                                     @endif
                                     @endforeach 
+                                    @endif
                             </div>
                         </div>
                     </div>
@@ -405,14 +368,43 @@
                                     </select>
                                 </div></form>
                             </div> -->
+                            
                         </div>
                     </div>
                     <div class="row">
+                     @if($user != "")   
                      @foreach ($list as $item)
                      @if ( $item -> deleted == 0 )
                         <div class="col-lg-4 col-md-6 col-sm-6">
                             <div class="product__item">
-                                <div class="product__item__pic set-bg" data-setbg="{{$item -> thumbnail}}">
+                                <div class="product__item__pic set-bg" data-setbg="../../public/sanpham/products/{{ $item -> thumbnail}}.jpg">
+                                    <ul class="product__item__pic__hover">
+                                @if($item -> like_user != "" && $item -> like_user == $user -> id)
+                                            <li><a href="{{ route('plike') }}"><i style="color:red;" class="fa fa-heart"></i></a></li>
+                                @else
+                                            <li><a href="{{ route('likeproduct1') }}?id={{$item -> id}}"><i class="fa fa-heart"></i></a></li>   
+                                @endif
+                                        <li><a href="{{ route('det') }}?id={{$item -> id}}"><i class="fa fa-shopping-cart"></i></a></li>
+                                    </ul>
+                                </div>
+                                <div class="product__item__text">
+                                    <h6><a href="{{ route('det') }}?id={{$item -> id}}">{{$item -> name}}</a></h6>
+                                    @if ($item -> sale > 1)
+                        <h5 style="color:#b3822e;">{{ number_format($item -> giasale) }} đ<h5>
+                        @else
+                        <h5 style="color:#b3822e;">{{ number_format($item -> price) }} đ<h5>
+                        @endif
+                                </div>
+                            </div>
+                        </div>
+                        @endif
+                        @endforeach 
+                        @else
+                        @foreach ($list as $item)
+                     @if ( $item -> deleted == 0 )
+                        <div class="col-lg-4 col-md-6 col-sm-6">
+                            <div class="product__item">
+                                <div class="product__item__pic set-bg" data-setbg="../../public/sanpham/products/{{ $item -> thumbnail}}.jpg">
                                     <ul class="product__item__pic__hover">
                                         <li><a href="#"><i class="fa fa-heart"></i></a></li>
                                         <li><a href="{{ route('det') }}?id={{$item -> id}}"><i class="fa fa-shopping-cart"></i></a></li>
@@ -430,13 +422,12 @@
                         </div>
                         @endif
                         @endforeach 
-                        
-                        
-
+                        @endif
                     </div>
                         <ul class="pagination justify-content-center" style="margin:20px 0">
- {{ $list ->links() }}
-</ul>
+                             {{ $list ->links() }}
+                          </ul>   
+                       
                 </div>
             </div>
         </div>

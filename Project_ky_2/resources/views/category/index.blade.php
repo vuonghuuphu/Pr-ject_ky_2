@@ -37,13 +37,14 @@
 <tr>
         <td>{{$count++}}</td>
         <td>{{$item -> name}}</td>
-        <td><img src="{{ $item -> img}}" width="100px" height="100px"></td>
+        <td><img src="../public/sanpham/category/{{ $item -> img}}.jpg" width="100px" height="100px"></td>
         <td> <a href="{{ route('categories.delete') }}?id={{$item -> id}}"><button type="button" class="btn btn-danger">Xóa</button></a> </td>
         <td>  <a href="{{ route('categories.edit') }}?id={{$item -> id}}"><button type="button" class="btn btn-info">Sửa</button></a></td>
 </tr>                          
 @endforeach
     </tbody>
   </table>
+  
   <h2>Deleted list</h2>
   <p>    <table class="table table-bordered table-sm">
     <thead>
@@ -60,7 +61,7 @@
 <tr>
         <td>{{$count1++}}</td>
         <td>{{$item -> name}}</td>
-        <td><img src="{{ $item -> img}}" width="100px" height="100px"></td>
+        <td><img src="../public/sanpham/category/{{ $item -> img}}.jpg" width="100px" height="100px"></td>
         <td> <a href="{{ route('categories.delete_ht') }}?id={{$item -> id}}"><button type="button" class="btn btn-danger">Xóa</button></a> </td>
         <td>  <a href="{{ route('categories.khoiphuc') }}?id={{$item -> id}}"><button type="button" class="btn btn-info">Khôi phục</button></a></td>
 </tr>                          

@@ -34,7 +34,6 @@
         <th>luot thich</th>
         <th>luot mua</th>
         <th>Giá sale</th>
-        <th>Noi dung</th>
         <th></th>
         <th></th>
       </tr>
@@ -49,22 +48,27 @@
   <tr>
         <td>{{$count++}}</td>
         <td>{{ $item -> name}}</td>
-        <td><img src="{{ $item -> thumbnail}}" width="100px" height="100px"></td>
+        <td><img src="../public/sanpham/products/{{ $item -> thumbnail}}.jpg" width="100px" height="100px"></td>
         <td>{{ $item -> price}}</td>
         <td>{{ $item -> category_id}}</td>
         <td>{{ $item -> sale}}</td>
         <td>{{ $item -> luotthich}}</td>
         <td>{{ $item -> luotmua}}</td>
         <td>{{ $item -> giasale}}</td>
-        <td>{{ $item -> content}}</td>
         <td><a href="{{route('products.delete')}}?id={{$item -> id}}"><button type="button" class="btn btn-danger">Xóa</button></a> </td>
-        <td><a href="{{route('products.edit')}}?id={{$item -> id}}"><button type="button" class="btn btn-info">Sửa</button></a></td>
+        <td><a href="{{route('menus.edit')}}?id={{$item -> id}}"><button type="button" class="btn btn-info">Sửa</button></a></td>
  </tr>         
         @endforeach
                         
     </tbody>
   </table>
+  <ul class="pagination justify-content-center" style="margin:20px">
+                             {{ $list ->links() }}
+                             
+  </ul>
 </div>
+
+                        
   <h2>Deleted list</h2>
   <p>    <table class="table table-bordered table-sm">
     <thead>
@@ -78,7 +82,6 @@
         <th>luot thich</th>
         <th>luot mua</th>
         <th>Giá sale</th>
-        <th>Nội dung</th>
         <th></th>
       </tr>
     </thead>
@@ -87,14 +90,13 @@
 <tr>
                 <td>{{$count++}}</td>
         <td>{{ $item -> name}}</td>
-        <td><img src="{{ $item -> thumbnail}}" width="100px" height="100px"></td>
+        <td><img src="../public/sanpham/products/{{ $item -> thumbnail}}.jpg" width="100px" height="100px"></td>
         <td>{{ $item -> price}}</td>
         <td>{{ $item -> category_id}}</td>
         <td>{{ $item -> sale}}</td>
         <td>{{ $item -> luotthich}}</td>
         <td>{{ $item -> luotmua}}</td>
         <td>{{ $item -> giasale}}</td>
-        <td>{{ $item -> content}}</td>
         <td> <a href="{{route('products.delete_ht')}}?id={{$item -> id}}"><button type="button" class="btn btn-danger">Xóa</button></a> </td>
         <td>  <a href="{{route('products.khoiphuc')}}?id={{$item -> id}}"><button type="button" class="btn btn-info">Khôi phục</button></a></td>
 </tr> 

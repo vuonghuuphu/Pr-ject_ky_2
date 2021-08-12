@@ -33,7 +33,7 @@
     <div class="humberger__menu__overlay"></div>
     <div class="humberger__menu__wrapper">
         <div class="humberger__menu__logo">
-            <a href="#"><img src="https://i.ytimg.com/vi/zy9neIJzttY/maxresdefault.jpg" alt=""></a>
+            <a href="#"><img src="sanpham/cafedenda.jpg" alt=""></a>
         </div>
         <div class="humberger__menu__cart">
             <ul>
@@ -100,7 +100,11 @@
                             </div>
 
                             <div class="header__top__right__auth">
-                                <a href="#"><i class="fa fa-user"></i> Login</a>
+                                @if($user != "")
+                                <a href="#"><i class="fa fa-user"></i>{{$user -> name}}</a>
+                                @else
+                                <a href="#"><i class="fa fa-user"></i>login</a>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -128,18 +132,23 @@
                             @endforeach
                                 </ul>
                             </li>
-                            <li><a href="./shop-grid.html">Tin tức</a></li>
-                            <li><a href="./blog.html">about us</a></li>
+                            <li><a href="{{ route('news') }}">Tin tức</a></li>
+                            <li><a href="{{ route('abus') }}">about us</a></li>
                         </ul>
                     </nav>
                 </div>
                 <div class="col-lg-3"style="padding-top: 40px;">
                     <div class="header__cart">
                         <ul>
-                            <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>
-                            <li><a href="#"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li>
+                            @if($user == "")
+                            <li><a href=""><i class="fa fa-heart"></i> <span>{{ $l }}</span></a></li>
+                            <li><a href=""><i class="fa fa-shopping-bag"></i> <span>{{ $t }}</span></a></li>
+                            @else
+                            <li><a href="{{ route('plike') }}"><i class="fa fa-heart"></i> <span>{{ $l }}</span></a></li>
+                            <li><a href="{{ route('cart') }}"><i class="fa fa-shopping-bag"></i> <span>{{ $t }}</span></a></li>
+                            @endif
                         </ul>
-                        <div class="header__cart__price">item: <span>$150.00</span></div>
+                        
                     </div>
                 </div>
             </div>
@@ -170,9 +179,10 @@
                 <div class="col-lg-9">
                     <div class="hero__search">
                         <div class="hero__search__form">
-                            <form method="GET">
+                            <form action="{{route('product')}}" method="get">
+                                <input type="hidden" id="_token" name="_token" value="{{ csrf_token() }}"/>
                                 <input type="text" placeholder="Tìm kiếm sản phẩm ?" name="s">
-                                <button type="submit" class="site-btn"><a href="" style="color: white;">SEARCH</a></button>
+                                <button type="submit" class="site-btn" style="color: white;">SEARCH</button>
                             </form>
                         </div>
                         <div class="hero__search__phone">
@@ -185,11 +195,11 @@
                             </div>
                         </div>
                     </div>
-                    <div class="hero__item set-bg" data-setbg="http://chefjob.vn/wp-content/uploads/2020/07/mot-ly-latte-dung-chuan.jpg">
+                    <div class="hero__item set-bg" data-setbg="../../public/sanpham/products/lattepn.jpg">
                         <div class="hero__text">
                             <h2 style="color: white;">Latte coffee<br /></h2>
                             <p style="color: white;">Loại Coffee Được Cả Thế Giới Yêu Thích</p>
-                            <a href="#" class="primary-btn">Xem ngay</a>
+                            <a href="{{ route('product') }}?s= latte" class="primary-btn">Xem ngay</a>
                         </div>
                     </div>
                 </div>
@@ -206,7 +216,7 @@
                     @foreach ($list_danhmuc as $item)
                     <div class="col-lg-3">
                         <div class="categories__item set-bg">
-                            <img src="{{$item -> img}}">
+                            <img src="../../public/sanpham/category/{{ $item -> img}}.jpg" height="100%">
                             <h5><a href="{{ route('product') }}?id={{$item -> id}}">{{$item -> name}}</a></h5>
                         </div>
                     </div>
@@ -229,13 +239,18 @@
                 </div>
             </div>
             <div class="row featured__filter">
-                @foreach ($list_spnb as $item)
+@if($user != "")
+@foreach ($list_spnb as $item)
                 <div class="col-lg-3 col-md-4 col-sm-6 mix oranges fresh-meat">
                     <div class="featured__item">
                         <div class="featured__item__pic set-bg">
-                            <img src="{{$item -> thumbnail}}" width="100%" height="100%">
+                            <img src="../../public/sanpham/products/{{ $item -> thumbnail}}.jpg" width="100%" height="100%">
                             <ul class="featured__item__pic__hover">
-                                <li><a href="#"><i class="fa fa-heart"></i></a></li>
+                                @if($item -> like_user != "" && $item -> like_user == $user -> id)
+                                <li><a href="{{ route('plike') }}"><i style="color:red;" class="fa fa-heart"></i></a></li>
+                                @else
+                                <li><a href="{{ route('likeproduct') }}?id={{$item -> id}}"><i class="fa fa-heart"></i></a></li>   
+                                @endif
                                 <li><a href="{{ route('det') }}?id={{$item -> id}}"><i class="fa fa-shopping-cart"></i></a></li>
                             </ul>
                         </div>
@@ -250,6 +265,30 @@
                     </div>
                 </div>
 @endforeach
+@else
+@foreach ($list_spnb as $item)
+                <div class="col-lg-3 col-md-4 col-sm-6 mix oranges fresh-meat">
+                    <div class="featured__item">
+                        <div class="featured__item__pic set-bg">
+                            <img src="../../public/sanpham/products/{{ $item -> thumbnail}}.jpg" width="100%" height="100%">
+                            <ul class="featured__item__pic__hover">
+                                <li><a href=""><i class="fa fa-heart"></i></a></li>   
+                                <li><a href="{{ route('det') }}?id={{$item -> id}}"><i class="fa fa-shopping-cart"></i></a></li>
+                            </ul>
+                        </div>
+                        <div class="featured__item__text">
+                            <h6><a href="#">{{$item -> name}}</a></h6>
+                        @if ($item -> sale > 1)
+                        <h5 style="color:#b3822e;">{{ number_format($item -> giasale) }} đ<h5>
+                        @else
+                        <h5 style="color:#b3822e;">{{ number_format($item -> price) }} đ<h5>
+                        @endif
+                        </div>
+                    </div>
+                </div>
+@endforeach
+@endif
+
             </div>
         </div>
     </section>
@@ -268,7 +307,7 @@
                             @if ($count++ < 4)
                                 <a href="{{ route('det') }}?id={{$item -> id}}" class="latest-product__item">
                                     <div class="latest-product__item__pic" style="width: 150px;">
-                                        <img src="{{$item -> thumbnail}}">
+                                        <img src="../../public/sanpham/products/{{ $item -> thumbnail}}.jpg">
                                     </div>
                                     <div class="latest-product__item__text">
                                         <h6>{{$item -> name}}</h6>
@@ -288,7 +327,7 @@
                             @if ($count1++ >=4)
                                     <a href="{{ route('det') }}?id={{$item -> id}}" class="latest-product__item">
                                     <div class="latest-product__item__pic" style="width: 150px;">
-                                        <img src="{{$item -> thumbnail}}">
+                                        <img src="../../public/sanpham/products/{{ $item -> thumbnail}}.jpg">
                                     </div>
                                     <div class="latest-product__item__text">
                                         <h6>{{$item -> name}}</h6>
@@ -307,14 +346,14 @@
                 </div>
                 <div class="col-lg-4 col-md-6">
                     <div class="latest-product__text">
-                        <h4>Xếp theo đánh giá</h4>
+                        <h4>Xếp theo lượt thích</h4>
                          <div class="latest-product__slider owl-carousel">
                             <div class="latest-prdouct__slider__item">
                             @foreach ($list_like as $item) 
                             @if ($count3++ < 4)
                                 <a href="{{ route('det') }}?id={{$item -> id}}" class="latest-product__item">
                                     <div class="latest-product__item__pic" style="width: 150px;">
-                                        <img src="{{$item -> thumbnail}}">
+                                        <img src="../../public/sanpham/products/{{ $item -> thumbnail}}.jpg">
                                     </div>
                                     <div class="latest-product__item__text">
                                         <h6>{{$item -> name}}</h6>
@@ -334,7 +373,7 @@
                             @if ($count4++ >=4)
                                     <a href="{{ route('det') }}?id={{$item -> id}}" class="latest-product__item">
                                     <div class="latest-product__item__pic" style="width: 150px;">
-                                        <img src="{{$item -> thumbnail}}">
+                                        <img src="../../public/sanpham/products/{{ $item -> thumbnail}}.jpg">
                                     </div>
                                     <div class="latest-product__item__text">
                                         <h6>{{$item -> name}}</h6>
@@ -360,7 +399,7 @@
                             @if ($count5++ < 4)
                                 <a href="{{ route('det') }}?id={{$item -> id}}" class="latest-product__item">
                                     <div class="latest-product__item__pic" style="width: 150px;">
-                                        <img src="{{$item -> thumbnail}}">
+                                        <img src="../../public/sanpham/products/{{ $item -> thumbnail}}.jpg">
                                     </div>
                                     <div class="latest-product__item__text">
                                         <h6>{{$item -> name}}</h6>
@@ -380,7 +419,7 @@
                             @if ($count6++ >=4)
                                     <a href="{{ route('det') }}?id={{$item -> id}}" class="latest-product__item">
                                     <div class="latest-product__item__pic" style="width: 150px;">
-                                        <img src="{{$item -> thumbnail}}">
+                                        <img src="../../public/sanpham/products/{{ $item -> thumbnail}}.jpg">
                                     </div>
                                     <div class="latest-product__item__text">
                                         <h6>{{$item -> name}}</h6>
@@ -418,13 +457,13 @@
                     <div class="col-lg-4 col-md-4 col-sm-6">
                     <div class="blog__item">
                         <div class="blog__item__pic">
-                            <img src="{{$item -> thumnail}}" alt="">
+                            <img src="../../public/sanpham/tintuc/{{ $item -> thumbnail}}.jpg" alt="">
                         </div>
                         <div class="blog__item__text">
                             <ul>
                                 <li><i class="fa fa-calendar-o"></i> {{$item -> created_at}}</li>
                             </ul>
-                            <h5><a href="#">{{$item -> title}}</a></h5>
+                            <h5><a href="{{ route('newdet') }}?id={{$item -> id}}">{{$item -> title}}</a></h5>
                             <p>{{$item -> demo}}</p>
                         </div>
                     </div>

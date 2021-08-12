@@ -81,6 +81,14 @@ Route::prefix('menus')->group(function () {
         'as' => 'menus.delete',
         'uses' =>'App\Http\Controllers\MenuController@delete'
     ]);
+    Route::get('/deleteht', [
+        'as' => 'menus.delete_ht',
+        'uses' =>'App\Http\Controllers\MenuController@delete_ht'
+    ]);
+        Route::get('/khoiphuc', [
+        'as' => 'menus.khoiphuc',
+        'uses' =>'App\Http\Controllers\MenuController@khoiphuc'
+    ]);
 });
 
 
@@ -179,7 +187,27 @@ Route::prefix('users')->group(function () {
 });
 
 Route::prefix('Cofffee shop')->group(function () {
-Route::get('/homepage','App\Http\Controllers\Controller_sanpham@homepage')->name('home');
+Route::get('/Trang chủ','App\Http\Controllers\Controller_sanpham@homepage')->name('home');
 Route::get('/sanpham','App\Http\Controllers\Product@sp')->name('product');
 Route::get('/sanphamdet','App\Http\Controllers\Controller_productdetails@d')->name('det');
+Route::get('/tin tuc','App\Http\Controllers\Controllernews@w')->name('news');
+Route::get('/about us','App\Http\Controllers\Controllernews@us')->name('abus');
+Route::get('/tin tuc de','App\Http\Controllers\Controllernews@dn')->name('newdet');
+Route::get('/likeproduct','App\Http\Controllers\Controller_sanpham@like')->name('likeproduct');
+Route::get('/likeproduct1','App\Http\Controllers\Controller_sanpham@like1')->name('likeproduct1');
+Route::get('/likeproduct2','App\Http\Controllers\Controller_sanpham@like2')->name('likeproduct2');
+Route::get('/gio hang','App\Http\Controllers\Controllershopcart@shopc')->name('cart');
+Route::get('/san pham yeu thich','App\Http\Controllers\Controllershopcart@pagelike')->name('plike');
+Route::get('/addc','App\Http\Controllers\Controller_cart@adc')->name('addcart');
+Route::get('/del','App\Http\Controllers\Controller_cart@delete')->name('delete_cart');
+Route::get('/dellike','App\Http\Controllers\Controller_cart@dlike')->name('del_like');
+Route::get('/thanh toán','App\Http\Controllers\Controllershopcart@buy')->name('tt');
+Route::post('/thanh toán thành công','App\Http\Controllers\Controllershopcart@tc')->name('ttc');
 });
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

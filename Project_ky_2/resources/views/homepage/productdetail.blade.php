@@ -78,11 +78,11 @@
     <!-- Humberger End -->
 
     <!-- Header Section Begin -->
-    <header class="header">
+     <header class="header">
         <div class="header__top">
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-6">
+                    <div class="col-lg-6 col-md-6">
                         <div class="header__top__left">
                             <ul>
                                 <li><i class="fa fa-envelope"></i> hello@colorlib.com</li>
@@ -90,7 +90,7 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="col-lg-6">
+                    <div class="col-lg-6 col-md-6">
                         <div class="header__top__right">
                             <div class="header__top__right__social">
                                 <a href="#"><i class="fa fa-facebook"></i></a>
@@ -100,43 +100,55 @@
                             </div>
 
                             <div class="header__top__right__auth">
-                                <a href="#"><i class="fa fa-user"></i> Login</a>
+                                @if($user != "")
+                                <a href="#"><i class="fa fa-user"></i>{{$user -> name}}</a>
+                                @else
+                                <a href="#"><i class="fa fa-user"></i>login</a>
+                                @endif
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+
+
         <div class="container">
             <div class="row">
-                <div class="col-lg-3" >
+                <div class="col-lg-3">
                     <div class="header__logo">
                         <a href="{{ route('home') }}"><img src="https://i.ytimg.com/vi/zy9neIJzttY/maxresdefault.jpg" height="100px"></a>
                     </div>
                 </div>
                 <div class="col-lg-6" style="padding-top: 30px;">
                     <nav class="header__menu">
-                       <ul>
+                        <ul>
                             <li><a href="{{ route('home') }}">Trang chủ</a></li>
                             <li class="active"><a href="#">Sản phẩm</a>
-                                <ul class="header__menu__dropdown">
-                            @foreach ($list_danhmuc as $item)
+                            <ul class="header__menu__dropdown">
+                             @foreach ($list_danhmuc as $item)
                             <li><a href="{{ route('product') }}?id={{$item -> id}}">{{$item -> name}}</a></li>
                             @endforeach
                                 </ul>
                             </li>
-                            <li><a href="./shop-grid.html">Tin tức</a></li>
-                            <li><a href="./blog.html">about us</a></li>
+                            <li><a href="{{ route('news') }}">Tin tức</a></li>
+                            <li><a href="{{ route('abus') }}">about us</a></li>
                         </ul>
                     </nav>
                 </div>
-                <div class="col-lg-3" style="padding-top: 30px;">
+                <div class="col-lg-3"style="padding-top: 40px;">
                     <div class="header__cart">
                         <ul>
-                            <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>
-                            <li><a href="#"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li>
+                            @if($user == "")
+                            <li><a href=""><i class="fa fa-heart"></i> <span>{{ $l }}</span></a></li>
+                            <li><a href=""><i class="fa fa-shopping-bag"></i> <span>{{ $t }}</span></a></li>
+                            @else
+                            <li><a href="{{ route('plike') }}"><i class="fa fa-heart"></i> <span>{{ $l }}</span></a></li>
+                            <li><a href="{{ route('cart') }}"><i class="fa fa-shopping-bag"></i> <span>{{ $t }}</span></a></li>
+                            @endif
                         </ul>
-                        <div class="header__cart__price">item: <span>$150.00</span></div>
+                        
                     </div>
                 </div>
             </div>
@@ -167,10 +179,13 @@
                 <div class="col-lg-9">
                     <div class="hero__search">
                         <div class="hero__search__form">
-                            <form method="GET">
+                            <div class="hero__search__form">
+                            <form action="{{route('product')}}" method="get">
+                                <input type="hidden" id="_token" name="_token" value="{{ csrf_token() }}"/>
                                 <input type="text" placeholder="Tìm kiếm sản phẩm ?" name="s">
-                                <button type="submit" class="site-btn">SEARCH</button>
+                                <button type="submit" class="site-btn" style="color: white;">SEARCH</button>
                             </form>
+                        </div>
                         </div>
                         <div class="hero__search__phone">
                             <div class="hero__search__phone__icon">
@@ -211,6 +226,7 @@
 
     <!-- Product Details Section Begin -->
     <section class="product-details spad">
+         @if($user != "")
         @foreach ($list1 as $item)
         <div class="container">
             <div class="row">
@@ -218,7 +234,7 @@
                     <div class="product__details__pic">
                         <div class="product__details__pic__item">
                             <img class="product__details__pic__item--large"
-                                src="{{$item -> thumbnail}}" alt="">
+                                src="../../public/sanpham/products/{{ $item -> thumbnail}}.jpg" alt="">
                         </div>
 <!--                         <div class="product__details__pic__slider owl-carousel">
                             <img data-imgbigurl="img/product/details/product-details-2.jpg"
@@ -252,17 +268,13 @@
                         <div class="product__details__price" style="color:#b3822e;">{{ number_format($item -> price) }} đ</div>
                         @endif
                         <p>{{$item -> content}}</p>
-                        <div class="product__details__quantity">
-                            <div class="quantity">
-                                <div class="pro-qty">
-                                    <input type="text" value="1">
-                                </div>
-                            </div>
-                        </div>   
-
-                        <a href="#" class="primary-btn">Thêm giỏ hàng</a>
-                        <!-- <a href="#" class="heart-icon"><span class="icon_heart_alt"></span></a> -->
-                        <ul>
+                        <a href="{{ route('addcart') }}?id={{$item -> id}}" class="primary-btn">Thêm giỏ hàng</a>
+                        @if($item -> like_user != "" && $user != "")
+                            <a href="{{ route('plike') }}" class="heart-icon"><i style="color:red;" class="fa fa-heart"></i></a>
+                        @else
+                            <a href="{{ route('likeproduct2') }}?id={{$item -> id}}" class="heart-icon"><i class="fa fa-heart"></i></a>  
+                         @endif
+                        <a href="{{ route('cart') }}" class="heart-icon"><i class="fa fa-shopping-cart"></i></a> 
                          
                     </div>
                 </div>
@@ -270,6 +282,74 @@
             </div>
         </div>
          @endforeach  
+         @else
+         @foreach ($list1 as $item)
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-md-6">
+                    <div class="product__details__pic">
+                        <div class="product__details__pic__item">
+                            <img class="product__details__pic__item--large"
+                                src="../../public/sanpham/products/{{ $item -> thumbnail}}.jpg" alt="">
+                        </div>
+<!--                         <div class="product__details__pic__slider owl-carousel">
+                            <img data-imgbigurl="img/product/details/product-details-2.jpg"
+                                src="img/product/details/thumb-1.jpg" alt="">
+                            <img data-imgbigurl="img/product/details/product-details-3.jpg"
+                                src="img/product/details/thumb-2.jpg" alt="">
+                            <img data-imgbigurl="img/product/details/product-details-5.jpg"
+                                src="img/product/details/thumb-3.jpg" alt="">
+                            <img data-imgbigurl="img/product/details/product-details-4.jpg"
+                                src="img/product/details/thumb-4.jpg" alt="">
+                        </div> -->
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6" style="padding-top: 30px;">
+                    <div class="product__details__text">
+                        
+                 
+                
+                        <h3>{{$item -> name}}</h3>
+<!--                         <div class="product__details__rating">
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star-half-o"></i>
+                            <span>(18 reviews)</span>
+                        </div> -->
+                        @if ($item -> sale > 1)
+                        <div class="product__details__price"style="color:#b3822e;">{{ number_format($item -> giasale) }} đ</div>
+                        @else
+                        <div class="product__details__price" style="color:#b3822e;">{{ number_format($item -> price) }} đ</div>
+                        @endif
+                        <p>{{$item -> content}}</p>
+                        <!-- <div class="product__details__quantity">
+                            <form action="{{route('categories.store')}}" method="post">
+                                <input type="hidden" id="_token" name="_token" value="{{ csrf_token() }}"/>
+                            <div class="quantity">
+                                <div class="pro-qty">
+                                    <input type="text" value="1">
+                                </div>
+                            </div>
+                             </form>
+                        </div>    -->
+
+                        <a href="" class="primary-btn">Thêm giỏ hàng</a>
+                        @if($item -> like_user != "" && $user != "")
+                            <a href="" class="heart-icon"><i style="color:red;" class="fa fa-heart"></i></a>
+                        @else
+                            <a href="" class="heart-icon"><i class="fa fa-heart"></i></a>  
+                         @endif
+                        <a href="" class="heart-icon"><i class="fa fa-shopping-cart"></i></a>  
+                         
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+         @endforeach  
+         @endif
     </section>
     <!-- Product Details Section End -->
 
@@ -287,15 +367,21 @@
                 @foreach ($list_spk as $item)
                 <div class="col-lg-3 col-md-4 col-sm-6">
                     <div class="product__item">
-                        <div class="product__item__pic set-bg" data-setbg="{{$item -> thumbnail}}">
+                        <div class="product__item__pic set-bg" data-setbg="../../public/sanpham/products/{{ $item -> thumbnail}}.jpg">
                             <ul class="product__item__pic__hover">
-                                <li><a href="#"><i class="fa fa-heart"></i></a></li>
+                                @if($item -> like_user != "" && $user != "")
+                                <li><a href="{{ route('plike') }}"><i  style="color:red" class="fa fa-heart"></i></a></li>
+                                @elseif( $user == "")
+                                <li><a href=""><i class="fa fa-heart"></i></a></li>
+                                @else
+                                <li><a href="{{ route('likeproduct2') }}?id={{$item -> id}}"><i class="fa fa-heart"></i></a></li>
+                                @endif
                                 <li><a href="{{ route('det') }}?id={{$item -> id}}"><i class="fa fa-shopping-cart"></i></a></li>
                             </ul>
                         </div>
                         <div class="product__item__text">
-                            <h6><a href="{{ route('det') }}?id={{$item -> id}}">{{$item -> name}}</a></h6>
-                            @if ($item -> sale > 1)
+                        <h6><a href="{{ route('det') }}?id={{$item -> id}}">{{$item -> name}}</a></h6>
+                        @if ($item -> sale > 1)
                         <h5 style="color:#b3822e;">{{ number_format($item -> giasale) }} đ<h5>
                         @else
                         <h5 style="color:#b3822e;">{{ number_format($item -> price) }} đ<h5>
